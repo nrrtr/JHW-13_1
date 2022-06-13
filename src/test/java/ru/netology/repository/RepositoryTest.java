@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import ru.netology.products.Book;
 import ru.netology.products.Product;
 import ru.netology.products.Smartphone;
+import ru.netology.products.exceptions.AlreadyExistsException;
 import ru.netology.products.exceptions.NotFoundException;
 import ru.netology.products.repository.Repository;
 
@@ -77,6 +78,14 @@ public class RepositoryTest {
     void shouldNotRemoveByIdInEmptyRepo() {
         assertThrows(NotFoundException.class, () -> {
             repo.removeById(1234);
+        });
+    }
+
+    @Test
+    void shouldReturnAlreadyExistsException() {
+        repo.save(p1);
+        assertThrows(AlreadyExistsException.class, () -> {
+            repo.save(p1);
         });
     }
 }

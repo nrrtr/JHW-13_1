@@ -1,6 +1,7 @@
 package ru.netology.products.repository;
 
 import ru.netology.products.Product;
+import ru.netology.products.exceptions.AlreadyExistsException;
 import ru.netology.products.exceptions.NotFoundException;
 
 public class Repository {
@@ -14,11 +15,17 @@ public class Repository {
         this.storage = storage;
     }
 
-    public void save(Product inputProduct) {
-        Product[] tmp = new Product[storage.length + 1];
-        System.arraycopy(storage, 0, tmp, 0, storage.length);
-        tmp[tmp.length - 1] = inputProduct;
-        storage = tmp;
+    public void save(Product inputProduct) throws RuntimeException {
+        if (findById(inputProduct.getId()) != null) {
+            throw new AlreadyExistsException(
+                    "Продукт с id: " + inputProduct.getId() + " уже существует"
+            );
+        } else {
+            Product[] tmp = new Product[storage.length + 1];
+            System.arraycopy(storage, 0, tmp, 0, storage.length);
+            tmp[tmp.length - 1] = inputProduct;
+            storage = tmp;
+        }
     }
 
     public Product[] findAll() {
