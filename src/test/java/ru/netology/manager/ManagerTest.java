@@ -74,4 +74,15 @@ public class ManagerTest {
         Product[] ar = mng.searchBy("qwerty");
         assertArrayEquals(er, ar);
     }
+
+    @Test
+    void shouldReturnTrueWithMatches() {
+        mng.add(p1);
+        assertTrue(mng.matches(p1, "pro"));
+    }
+    @Test
+    void shouldReturnFalseWithMatches() {
+        mng.add(p1);
+        assertFalse(mng.matches(p1, "pra"));
+    }
 }

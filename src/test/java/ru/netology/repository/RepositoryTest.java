@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import ru.netology.products.Book;
 import ru.netology.products.Product;
 import ru.netology.products.Smartphone;
+import ru.netology.products.exceptions.NotFoundException;
 import ru.netology.products.repository.Repository;
 
 public class RepositoryTest {
@@ -65,10 +66,17 @@ public class RepositoryTest {
     }
 
     @Test
+    void shouldNotRemoveByIdInNonEmptyRepo() {
+        repo.save(p2);
+        repo.save(p3);
+        assertThrows(NotFoundException.class, () -> {
+            repo.removeById(1);
+        });
+    }
+    @Test
     void shouldNotRemoveByIdInEmptyRepo() {
-        repo.removeById(1);
-
-        Product[] er = {};
-        assertArrayEquals(er, repo.findAll());
+        assertThrows(NotFoundException.class, () -> {
+            repo.removeById(1234);
+        });
     }
 }
