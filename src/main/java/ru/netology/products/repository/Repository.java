@@ -1,6 +1,7 @@
 package ru.netology.products.repository;
 
 import ru.netology.products.Product;
+import ru.netology.products.exceptions.NotFoundException;
 
 public class Repository {
     private Product[] storage = new Product[0];
@@ -24,8 +25,10 @@ public class Repository {
         return getStorage();
     }
 
-    public void removeById(int valueOfId) {
-        if (storage.length != 0) {
+    public void removeById(int valueOfId) throws RuntimeException {
+        if ((storage.length == 0) || (findById(valueOfId) == null)) {
+            throw new NotFoundException("Продукт с id:" + valueOfId + " не найден");
+        } else {
             Product[] tmp = new Product[storage.length - 1];
             int tmpIndex = 0;
 
@@ -37,5 +40,14 @@ public class Repository {
             }
             setStorage(tmp);
         }
+    }
+
+    public Product findById(int inputValueOfId) {
+        for (Product product : this.getStorage()) {
+            if (product.getId() == inputValueOfId) {
+                return product;
+            }
+        }
+        return null;
     }
 }
